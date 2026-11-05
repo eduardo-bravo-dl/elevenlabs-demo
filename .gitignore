@@ -1,0 +1,8 @@
+# Local secrets written by `elevenlabs onboard`
+/.env.local
+
+# Local environment and generated files
+.venv/
+.idea/
+__pycache__/
+output.mp3
