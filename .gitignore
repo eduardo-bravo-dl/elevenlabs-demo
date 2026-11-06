@@ -1,8 +1,16 @@
-# Local secrets written by `elevenlabs onboard`
-/.env.local
+# Local secrets. Never commit these.
+.env
+.env.local
 
-# Local environment and generated files
+# Python
 .venv/
-.idea/
 __pycache__/
+.pytest_cache/
+
+# Generated files
+*.sqlite3
 output.mp3
+
+# Editor and OS files
+.idea/
+.DS_Store

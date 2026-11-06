@@ -16,6 +16,7 @@ Design notes:
 - Phone numbers in 10-digit, `+52` and legacy `+521` formats all match the same stored E.164
   number. Logs mask phone numbers to their last 4 digits and never include the secret.
 - Seed dates are relative to today in `America/Mexico_City`, so the demo never goes stale.
+- Messages are in English. The voice agent uses the data and answers the guest in Spanish.
 
 | Method | Path | Auth | Purpose |
 | --- | --- | --- | --- |
@@ -27,14 +28,18 @@ Design notes:
 
 ## Setup (macOS)
 
-Requires Python 3.9 or newer. Run everything from the `pms/` folder.
+Requires Python 3.9 or newer. The repo uses one virtual environment at the root, as described in
+the [main README](../README.md). Short version, from the repo root:
 
 ```bash
-cd pms
 python3 -m venv .venv
-.venv/bin/pip install -r requirements.txt
+source .venv/bin/activate
+pip install -r pms/requirements.txt
+cd pms
 cp .env.example .env.local   # then set TOOL_SECRET to a long random string
 ```
+
+Run all the commands below from the `pms/` folder, with the virtual environment active.
 
 Settings in `.env.local`:
 
@@ -48,9 +53,9 @@ Settings in `.env.local`:
 ## Seed, run, test
 
 ```bash
-.venv/bin/python -m scripts.seed                              # resets and reloads demo data
-.venv/bin/uvicorn app.main:create_app --factory --reload      # http://127.0.0.1:8000/docs
-.venv/bin/pytest -q                                           # uses a temporary database
+python -m scripts.seed                              # resets and reloads demo data
+uvicorn app.main:create_app --factory --reload      # http://127.0.0.1:8000/docs
+pytest -q                                           # uses a temporary database
 ```
 
 Re-run the seed script each day you demo so "arriving today" stays true. Restart the server
@@ -73,7 +78,7 @@ after changing `PMS_FAILURE_MODE`.
 
 ```bash
 export PMS=http://127.0.0.1:8000
-export SECRET=$(grep TOOL_SECRET .env.local | cut -d= -f2)
+export SECRET=$(grep '^TOOL_SECRET=' .env.local | cut -d= -f2-)
 ```
 
 Health:
